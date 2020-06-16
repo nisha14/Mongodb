@@ -1,0 +1,116 @@
+2018-11-27T03:00:27.947-0700 I CONTROL  [initandlisten] MongoDB starting : pid=10852 port=27018 dbpath=\data\rs2 64-bit host=INBADNRAO01
+2018-11-27T03:00:27.947-0700 I CONTROL  [initandlisten] targetMinOS: Windows 7/Windows Server 2008 R2
+2018-11-27T03:00:27.947-0700 I CONTROL  [initandlisten] db version v3.4.17
+2018-11-27T03:00:27.947-0700 I CONTROL  [initandlisten] git version: 7c14a47868643bb691a507a92fe25541f998eca4
+2018-11-27T03:00:27.948-0700 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.0.2o-fips  27 Mar 2018
+2018-11-27T03:00:27.948-0700 I CONTROL  [initandlisten] allocator: tcmalloc
+2018-11-27T03:00:27.948-0700 I CONTROL  [initandlisten] modules: none
+2018-11-27T03:00:27.948-0700 I CONTROL  [initandlisten] build environment:
+2018-11-27T03:00:27.950-0700 I CONTROL  [initandlisten]     distmod: 2008plus-ssl
+2018-11-27T03:00:27.950-0700 I CONTROL  [initandlisten]     distarch: x86_64
+2018-11-27T03:00:27.950-0700 I CONTROL  [initandlisten]     target_arch: x86_64
+2018-11-27T03:00:27.950-0700 I CONTROL  [initandlisten] options: { net: { port: 27018 }, replication: { oplogSizeMB: 64, replSet: "m101" }, storage: { dbPath: "\data\rs2", mmapv1: { smallFiles: true } }, systemLog: { destination: "file", path: "2.log" } }
+2018-11-27T03:00:27.952-0700 I STORAGE  [initandlisten] wiredtiger_open config: create,cache_size=7623M,session_max=20000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),file_manager=(close_idle_time=100000),checkpoint=(wait=60,log_size=2GB),statistics_log=(wait=0),verbose=(recovery_progress),
+2018-11-27T03:00:28.154-0700 W STORAGE  [initandlisten] Detected configuration for non-active storage engine mmapv1 when current storage engine is wiredTiger
+2018-11-27T03:00:28.154-0700 I CONTROL  [initandlisten] 
+2018-11-27T03:00:28.154-0700 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2018-11-27T03:00:28.154-0700 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2018-11-27T03:00:28.154-0700 I CONTROL  [initandlisten] 
+2018-11-27T15:30:28.651+0530 I FTDC     [initandlisten] Initializing full-time diagnostic data capture with directory '/data/rs2/diagnostic.data'
+2018-11-27T15:30:28.694+0530 I REPL     [initandlisten] Did not find local voted for document at startup.
+2018-11-27T15:30:28.694+0530 I REPL     [initandlisten] Did not find local replica set configuration document at startup;  NoMatchingDocument: Did not find replica set configuration document in local.system.replset
+2018-11-27T15:30:28.716+0530 I NETWORK  [thread1] waiting for connections on port 27018
+2018-11-27T15:31:29.818+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56444 #1 (1 connection now open)
+2018-11-27T15:31:29.833+0530 I -        [conn1] end connection 127.0.0.1:56444 (1 connection now open)
+2018-11-27T15:31:30.874+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56448 #2 (1 connection now open)
+2018-11-27T15:31:30.907+0530 I NETWORK  [conn2] received client metadata from 127.0.0.1:56448 conn2: { driver: { name: "NetworkInterfaceASIO-Replication", version: "3.4.17" }, os: { type: "Windows", name: "Microsoft Windows 8", architecture: "x86_64", version: "6.2 (build 9200)" } }
+2018-11-27T15:31:30.910+0530 I ASIO     [NetworkInterfaceASIO-Replication-0] Connecting to localhost:27017
+2018-11-27T15:31:31.957+0530 I ASIO     [NetworkInterfaceASIO-Replication-0] Successfully connected to localhost:27017, took 1047ms (1 connections now open to localhost:27017)
+2018-11-27T15:31:31.999+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56458 #3 (2 connections now open)
+2018-11-27T15:31:32.014+0530 I -        [conn3] end connection 127.0.0.1:56458 (2 connections now open)
+2018-11-27T15:31:32.022+0530 I REPL     [replExecDBWorker-0] Starting replication storage threads
+2018-11-27T15:31:32.279+0530 I REPL     [replication-0] Starting initial sync (attempt 1 of 10)
+2018-11-27T15:31:32.279+0530 I REPL     [ReplicationExecutor] New replica set config in use: { _id: "m101", version: 1, protocolVersion: 1, members: [ { _id: 0, host: "localhost:27017", arbiterOnly: false, buildIndexes: true, hidden: false, priority: 1.0, tags: {}, slaveDelay: 0, votes: 1 }, { _id: 1, host: "localhost:27018", arbiterOnly: false, buildIndexes: true, hidden: false, priority: 1.0, tags: {}, slaveDelay: 0, votes: 1 }, { _id: 2, host: "localhost:27019", arbiterOnly: false, buildIndexes: true, hidden: false, priority: 1.0, tags: {}, slaveDelay: 0, votes: 1 } ], settings: { chainingAllowed: true, heartbeatIntervalMillis: 2000, heartbeatTimeoutSecs: 10, electionTimeoutMillis: 10000, catchUpTimeoutMillis: 60000, getLastErrorModes: {}, getLastErrorDefaults: { w: 1, wtimeout: 0 }, replicaSetId: ObjectId('5bfd15f9a4215833eabb612b') } }
+2018-11-27T15:31:32.280+0530 I REPL     [ReplicationExecutor] This node is localhost:27018 in the config
+2018-11-27T15:31:32.280+0530 I REPL     [ReplicationExecutor] transition to STARTUP2
+2018-11-27T15:31:32.280+0530 I ASIO     [NetworkInterfaceASIO-Replication-0] Connecting to localhost:27019
+2018-11-27T15:31:32.280+0530 I REPL     [ReplicationExecutor] Member localhost:27017 is now in state SECONDARY
+2018-11-27T15:31:33.310+0530 I ASIO     [NetworkInterfaceASIO-Replication-0] Successfully connected to localhost:27019, took 1030ms (1 connections now open to localhost:27019)
+2018-11-27T15:31:33.310+0530 I REPL     [ReplicationExecutor] Member localhost:27019 is now in state STARTUP2
+2018-11-27T15:31:33.321+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56462 #4 (2 connections now open)
+2018-11-27T15:31:33.337+0530 I NETWORK  [conn4] received client metadata from 127.0.0.1:56462 conn4: { driver: { name: "NetworkInterfaceASIO-Replication", version: "3.4.17" }, os: { type: "Windows", name: "Microsoft Windows 8", architecture: "x86_64", version: "6.2 (build 9200)" } }
+2018-11-27T15:31:37.342+0530 I REPL     [replication-1] sync source candidate: localhost:27017
+2018-11-27T15:31:37.343+0530 I STORAGE  [replication-1] dropAllDatabasesExceptLocal 1
+2018-11-27T15:31:37.343+0530 I REPL     [replication-1] ******
+2018-11-27T15:31:37.343+0530 I REPL     [replication-1] creating replication oplog of size: 64MB...
+2018-11-27T15:31:37.355+0530 I STORAGE  [replication-1] Starting WiredTigerRecordStoreThread local.oplog.rs
+2018-11-27T15:31:37.376+0530 I STORAGE  [replication-1] The size storer reports that the oplog contains 0 records totaling to 0 bytes
+2018-11-27T15:31:37.376+0530 I STORAGE  [replication-1] Scanning the oplog to determine where to place markers for truncation
+2018-11-27T15:31:37.453+0530 I REPL     [replication-1] ******
+2018-11-27T15:31:37.454+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Connecting to localhost:27017
+2018-11-27T15:31:38.508+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Successfully connected to localhost:27017, took 1054ms (1 connections now open to localhost:27017)
+2018-11-27T15:31:38.509+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Connecting to localhost:27017
+2018-11-27T15:31:39.550+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Successfully connected to localhost:27017, took 1041ms (2 connections now open to localhost:27017)
+2018-11-27T15:31:39.550+0530 I REPL     [replication-0] CollectionCloner::start called, on ns:admin.system.version
+2018-11-27T15:31:39.585+0530 I INDEX    [InitialSyncInserters-admin.system.version0] build index on: admin.system.version properties: { v: 2, key: { version: 1 }, name: "incompatible_with_version_32", ns: "admin.system.version" }
+2018-11-27T15:31:39.585+0530 I INDEX    [InitialSyncInserters-admin.system.version0] 	 building index using bulk method; build may temporarily use up to 500 megabytes of RAM
+2018-11-27T15:31:39.601+0530 I INDEX    [InitialSyncInserters-admin.system.version0] build index on: admin.system.version properties: { v: 1, key: { _id: 1 }, name: "_id_", ns: "admin.system.version" }
+2018-11-27T15:31:39.602+0530 I INDEX    [InitialSyncInserters-admin.system.version0] 	 building index using bulk method; build may temporarily use up to 500 megabytes of RAM
+2018-11-27T15:31:39.602+0530 I COMMAND  [InitialSyncInserters-admin.system.version0] setting featureCompatibilityVersion to 3.4
+2018-11-27T15:31:39.627+0530 I REPL     [replication-0] No need to apply operations. (currently at { : Timestamp 1543312890000|1 })
+2018-11-27T15:31:39.627+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Ending connection to host localhost:27017 due to bad connection status; 1 connections to that host remain open
+2018-11-27T15:31:39.627+0530 I REPL     [replication-0] Finished fetching oplog during initial sync: CallbackCanceled: Callback canceled. Last fetched optime and hash: { ts: Timestamp 1543312890000|1, t: -1 }[3629882659329384920]
+2018-11-27T15:31:39.628+0530 I REPL     [replication-0] Initial sync attempt finishing up.
+2018-11-27T15:31:39.628+0530 I REPL     [replication-0] Initial Sync Attempt Statistics: { failedInitialSyncAttempts: 0, maxFailedInitialSyncAttempts: 10, initialSyncStart: new Date(1543312892279), initialSyncAttempts: [], fetchedMissingDocs: 0, appliedOps: 0, initialSyncOplogStart: Timestamp 1543312890000|1, initialSyncOplogEnd: Timestamp 1543312890000|1, databases: { databasesCloned: 1, admin: { collections: 1, clonedCollections: 1, start: new Date(1543312898509), end: new Date(1543312899627), elapsedMillis: 1118, admin.system.version: { documentsToCopy: 1, documentsCopied: 1, indexes: 2, fetchedBatches: 1, start: new Date(1543312899550), end: new Date(1543312899627), elapsedMillis: 77 } } } }
+2018-11-27T15:31:39.636+0530 I REPL     [replication-0] initial sync done; took 7s.
+2018-11-27T15:31:39.636+0530 I REPL     [replication-0] Starting replication fetcher thread
+2018-11-27T15:31:39.638+0530 I REPL     [replication-0] Starting replication applier thread
+2018-11-27T15:31:39.638+0530 I REPL     [rsBackgroundSync] could not find member to sync from
+2018-11-27T15:31:39.638+0530 I REPL     [ReplicationExecutor] Member localhost:27019 is now in state RECOVERING
+2018-11-27T15:31:39.640+0530 I REPL     [replication-0] Starting replication reporter thread
+2018-11-27T15:31:39.640+0530 I REPL     [rsSync] transition to RECOVERING
+2018-11-27T15:31:39.768+0530 I REPL     [rsSync] transition to SECONDARY
+2018-11-27T15:31:42.420+0530 I -        [conn2] end connection 127.0.0.1:56448 (2 connections now open)
+2018-11-27T15:31:43.423+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56473 #5 (2 connections now open)
+2018-11-27T15:31:43.439+0530 I NETWORK  [conn5] received client metadata from 127.0.0.1:56473 conn5: { driver: { name: "NetworkInterfaceASIO-Replication", version: "3.4.17" }, os: { type: "Windows", name: "Microsoft Windows 8", architecture: "x86_64", version: "6.2 (build 9200)" } }
+2018-11-27T15:31:44.639+0530 I REPL     [ReplicationExecutor] Member localhost:27017 is now in state PRIMARY
+2018-11-27T15:31:44.639+0530 I REPL     [ReplicationExecutor] Member localhost:27019 is now in state SECONDARY
+2018-11-27T15:31:44.641+0530 I REPL     [rsBackgroundSync] sync source candidate: localhost:27019
+2018-11-27T15:31:44.642+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Connecting to localhost:27019
+2018-11-27T15:31:45.661+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Successfully connected to localhost:27019, took 1019ms (1 connections now open to localhost:27019)
+2018-11-27T15:31:45.662+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Connecting to localhost:27019
+2018-11-27T15:31:46.690+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Successfully connected to localhost:27019, took 1028ms (2 connections now open to localhost:27019)
+2018-11-27T15:32:33.399+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56485 #6 (3 connections now open)
+2018-11-27T15:32:33.432+0530 I -        [conn6] end connection 127.0.0.1:56485 (3 connections now open)
+2018-11-27T15:32:40.697+0530 I NETWORK  [thread1] connection accepted from 127.0.0.1:56489 #7 (3 connections now open)
+2018-11-27T15:32:40.747+0530 I -        [conn7] end connection 127.0.0.1:56489 (3 connections now open)
+2018-11-27T15:33:44.576+0530 I -        [conn4] end connection 127.0.0.1:56462 (2 connections now open)
+2018-11-27T15:33:44.576+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Ending connection to host localhost:27019 due to bad connection status; 1 connections to that host remain open
+2018-11-27T15:33:44.576+0530 I REPL     [replication-2] Restarting oplog query due to error: HostUnreachable: An existing connection was forcibly closed by the remote host.. Last fetched optime (with hash): { ts: Timestamp 1543313024000|1, t: 1 }[-6583535565339244674]. Restarts remaining: 3
+2018-11-27T15:33:44.576+0530 I ASIO     [replication-2] dropping unhealthy pooled connection to localhost:27019
+2018-11-27T15:33:44.577+0530 I ASIO     [replication-2] after drop, pool was empty, going to spawn some connections
+2018-11-27T15:33:44.577+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Connecting to localhost:27019
+2018-11-27T15:33:44.577+0530 I REPL     [replication-2] Scheduled new oplog query Fetcher source: localhost:27019 database: local query: { find: "oplog.rs", filter: { ts: { $gte: Timestamp 1543313024000|1 } }, tailable: true, oplogReplay: true, awaitData: true, maxTimeMS: 60000, term: 1, readConcern: { afterOpTime: { ts: Timestamp 1543313024000|1, t: 1 } } } query metadata: { $replData: 1, $oplogQueryData: 1, $ssm: { $secondaryOk: true } } active: 1 findNetworkTimeout: 65000ms getMoreNetworkTimeout: 10000ms shutting down?: 0 first: 1 firstCommandScheduler: RemoteCommandRetryScheduler request: RemoteCommand 415 -- target:localhost:27019 db:local cmd:{ find: "oplog.rs", filter: { ts: { $gte: Timestamp 1543313024000|1 } }, tailable: true, oplogReplay: true, awaitData: true, maxTimeMS: 60000, term: 1, readConcern: { afterOpTime: { ts: Timestamp 1543313024000|1, t: 1 } } } active: 1 callbackHandle.valid: 1 callbackHandle.cancelled: 0 attempt: 1 retryPolicy: RetryPolicyImpl maxAttempts: 1 maxTimeMillis: -1ms
+2018-11-27T15:33:45.687+0530 I ASIO     [ReplicationExecutor] dropping unhealthy pooled connection to localhost:27019
+2018-11-27T15:33:45.688+0530 I ASIO     [ReplicationExecutor] after drop, pool was empty, going to spawn some connections
+2018-11-27T15:33:45.688+0530 I ASIO     [NetworkInterfaceASIO-Replication-0] Connecting to localhost:27019
+2018-11-27T15:33:45.818+0530 I CONTROL  [thread2] CTRL_CLOSE_EVENT signal
+2018-11-27T15:33:45.818+0530 I CONTROL  [consoleTerminate] got CTRL_CLOSE_EVENT, will terminate after current cmd ends
+2018-11-27T15:33:45.818+0530 I NETWORK  [consoleTerminate] shutdown: going to close listening sockets...
+2018-11-27T15:33:45.818+0530 I NETWORK  [consoleTerminate] closing listening socket: 532
+2018-11-27T15:33:45.818+0530 I NETWORK  [consoleTerminate] shutdown: going to flush diaglog...
+2018-11-27T15:33:45.819+0530 I REPL     [consoleTerminate] shutting down replication subsystems
+2018-11-27T15:33:45.819+0530 I REPL     [consoleTerminate] Stopping replication reporter thread
+2018-11-27T15:33:45.819+0530 I REPL     [SyncSourceFeedback] SyncSourceFeedback error sending update to localhost:27019: CallbackCanceled: Reporter no longer valid
+2018-11-27T15:33:45.819+0530 I REPL     [consoleTerminate] Stopping replication fetcher thread
+2018-11-27T15:33:45.819+0530 I REPL     [consoleTerminate] Stopping replication applier thread
+2018-11-27T15:33:46.590+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Failed to connect to localhost:27019 - HostUnreachable: No connection could be made because the target machine actively refused it.
+2018-11-27T15:33:46.590+0530 I ASIO     [NetworkInterfaceASIO-RS-0] Dropping all pooled connections to localhost:27019 due to failed operation on a connection
+2018-11-27T15:33:46.590+0530 I REPL     [rsBackgroundSync] Replication producer stopped after oplog fetcher finished returning a batch from our sync source.  Abandoning this batch of oplog entries and re-evaluating our sync source.
+2018-11-27T15:33:46.591+0530 I REPL     [consoleTerminate] Stopping replication storage threads
+2018-11-27T15:33:46.592+0530 I FTDC     [consoleTerminate] Shutting down full-time diagnostic data capture
+2018-11-27T15:33:46.597+0530 I STORAGE  [consoleTerminate] WiredTigerKVEngine shutting down
+2018-11-27T15:33:46.667+0530 I STORAGE  [consoleTerminate] shutdown: removing fs lock...
+2018-11-27T15:33:46.668+0530 I CONTROL  [consoleTerminate] now exiting
+2018-11-27T15:33:46.668+0530 I CONTROL  [consoleTerminate] shutting down with code:12
+2018-11-27T15:33:46.668+0530 I CONTROL  

@@ -1,0 +1,461 @@
+Monggodb
+
+
+global variable db
+use video -> even if it doesn't exist
+db.movies.insertOne({ "title": "Jaws", "year": 1975, "imdb": "tt0073195" });
+db.movies().find().pretty() -> returns a cursor object
+db.movies.find({"year":1981}).pretty()
+
+Document design
+
+If accessed at the same time as the main document -> embed
+document can't be more than 16 MB -> seperate collection
+
+Creating Documents :
+insertOne(), insertMany(), 
+- Update commands ("Upserts") -> update doesn't find document so inserts 
+
+_id field : 
+by default _id field if not provided
+All collections have index on _id field
+
+format : 12 byte HEX string 
+4 Date | 3 Mac addr | 2 PID | 3 Counter
+- - - - | - - - | - - | - - - 
+
+Note that the "Date" label that refers to the first four bytes does in fact reference a UTC datetime with a precision of seconds (not days). When talking about BSON, this is distinct from a timestamp, which is a special internal data type used in MongoDB replication and sharding.
+
+Reading documents 
+db.moviedetails.find({rated: "PG-13", year:2009 }).count() -> AND operator
+db.moviedetails.find({"tomato.meter" : 100 }).pretty()
+
+Equality matches on arrays:
+- on the entire array
+- based on any element
+- based on specific element
+- more complex matches using operators 
+
+db.moviedetails.find({"writers" : ["Ethan Coen","Joel Coen"] }).pretty() -> exact order matches
+db.moviedetails.find({"actors" : "Jeff Bridges"}).count() -> can appear anywhere in actors
+db.moviedetails.find({"actors.0" : "Jeff Bridges"}).count() -> should be first element in array of actors
+
+Equality  matches :
+- Scalars
+- Embedded documents
+- Arrays
+
+2 operators
+Cursors -> find method return cursor -> it cmd
+var c = db.moviedetails.find();
+var doc function() {return c.hasext() ? c.next() : null; }
+c.objsLeftInBatch();
+doc()
+doc()
+doc()
+
+Projection -> handy way to reduce number of results returned by an operation. Reduces number of fields returned
+db.moviedetails.find({rated: "PG-13"}, {title:1}).pretty() -> only include title
+-> _id is always returned
+- to exclude a field -> db.moviedetails.find({rated: "PG-13"}, {title:1, _id: 0}).pretty()
+
+Comparison operators :
+https://docs.mongodb.com/manual/reference/operator/query/
+db.movies.find({runtime : {$gt : 90}}).pretty()
+db.movies.find({runtime : {$gte : 90, $lte : 120}}).pretty() -> range 
+db.movieDetails.find({ "tomato.meter": { $gte: 95 }, runtime: { $gt: 180 } })
+db.movieDetails.find({ rated: { $ne: "UNRATED" } }).count()
+db.movieDetails.find({ rated: { $in: ["G", "PG"] } }).pretty()
+
+Element operators:
+db.moviesDetails.find({ "tomato.meter": { $exists: true } })
+db.moviesDetails.find({ "tomato.meter": { $exists: false } })
+
+// Value of $type may be either a BSON type number or the string alias
+// See https://docs.mongodb.org/manual/reference/operator/query/type
+db.moviesScratch.find({ _id: { $type: "string" } })
+
+Logical Operators:
+db.movieDetails.find({ $or : [ { "tomato.meter": { $gt: 99 } },
+                               { "metacritic": { $gt: 95 } } ] })
+
+db.movieDetails.find({ $and : [ { "metacritic": { $ne: 100 } },
+                                { "metacritic": { $exists: true } } ] }) -> query operators are implicitly anded for diff fileds
+								-> allows you to specify multiple criteria on the same field
+
+Regex Operators:
+db.movieDetails.find({ "awards.text": { $regex: /^Won.*/ } }).pretty()
+
+db.movieDetails.find({ "awards.text": { $regex: /^Won.*/ } },
+                     { title: 1, "awards": 1, _id: 0}).pretty()	
+
+Array Operators:
+https://docs.mongodb.org/manual/reference/operator/query
+db.movieDetails.find({ genres: { $all: ["Comedy", "Crime", "Drama"] } }).pretty()
+db.movieDetails.find({ countries: { $size: 1 } }).pretty()
+
+boxOffice: [ { "country": "USA", "revenue": 41.3 },
+             { "country": "Australia", "revenue": 2.9 },
+             { "country": "UK", "revenue": 10.1 },
+             { "country": "Germany", "revenue": 4.3 },
+             { "country": "France", "revenue": 3.5 } ]
+db.movieDetails.find({ boxOffice: { country: "UK", revenue: { $gt: 15 } } }) -> not this, does an OR on the fields
+We need an AND
+db.movieDetails.find({ boxOffice: {$elemMatch: { country: "UK", revenue: { $gt: 15 } } } })
+					 
+Updating Documents:
+https://docs.mongodb.org/manual/reference/operator/update_field
+- update one  -> Update first document that matches
+- update many 
+- replaceOne 
+db.movieDetails.updateOne({
+  title: "The Martian"
+}, {
+  $set: {
+    "awards": {
+      "wins": 8,
+      "nominations": 14,
+      "text": "Nominated for 3 Golden Globes. Another 8 wins & 14 nominations."
+    }
+  }
+});					 
+
+Blog internals :
+view -> ftl - freemarker
+controller/model - java/spark
+
+SEssion management 
+
+
+db.grades.aggregate([{'$group':{'_id':'$student_id', 'average':{$avg:'$score'}}}, {'$sort':{'average':-1}}, {'$limit':1}])
+
+db.grades.find({ 'score': { $gte: 65 }, {'$sort':{'score': 1}})
+db.grades.find({}).pretty()
+ 
+ Week 3 
+ Mongo db schema design -> dynamic design
+ Application - Driven schema -> 3rd normal form
+  -> Match the data access pattern in your application is the main goal while designing db schema 
+ 1. mongodb supports rich documents
+ 2. Prejoin /Embed data
+ 3. No mongo joins
+ 4. no constraints -> no PK or FK
+ 5. Atomic operations -> No transactions 
+ 6. no declared schema -> but will have a structure
+ 
+ Relational normalization
+ Goals of normalization -> 
+ 1. free the db of modification anamolies
+ 2. minimize redesign while extending the db
+ 3. Avoid bias towards any particular access pattern. -> we are not going to worry about this point in mongodb
+ 
+ Alertane schema design for blog:
+ posts: 		comments:			tag
+ {id: 1			{id:				{ id:
+ title:			 post_id: 1			  tag:
+ body:			 author:			  post_id: 1}	
+ date: }		 author_email:		
+				 order: }
+ 
+ - No joins in mongodb -> manually collect this code and display -> mutiple disk reads 
+ - rule -> dont take the relational db approach -> limitation is 16MB
+ 
+ Living without contraints -> refers to keeping your data consistent even though Mongodb lacks foreign key constraints
+ 
+ Mongodb doesn't support transactions - ACID properties
+ solutions -> Atomic operations -> work will be completed before someone sees the document -> no table joins so its usually one embeded document 
+ 1. Restrictive -> working within single document
+ 2. implement in s/w -> implementing locking in your code -> EG: banking 
+ 3. tolerate -> a little bit of in-consistency during transactions -> Eg : facebook
+ 
+ One to One relations : 
+ employee : resume
+ building : floor plan
+ patient : medical history
+ 
+ Employee -> {_id: 20, name: , resume: 30}
+ resume -> { _id: 30, jobs: [], education: [] or employee_ id : 20} -> or embed a list of resumes
+ or embed employee in resume 
+ 1. find frequency of access
+ 2. size of array
+ 3. Automacity of data - >keep collections in seperate files only when the size exceeds 16 MB or to reduce working set size of ur application
+ 
+ One to many :
+ city : person
+ person {_id: name: city: [] } -> city is duplicated. if city is updated, it will be too many updates
+ soultion -> true linking
+ people: {name : city: .... } 
+ city : {_id : "NYC", ...} 
+ -> rquires 2 collections 
+ one to few : 
+ blogposts: comments -> one collection works
+ 
+ Many to many relations:
+ books: authors -> few : few 
+ 
+ Books { _id: 12, title: "gone with wind", authors: [27] }
+ Authors {_id :27, name : "test", books : [12, 7, 8]} -> having references both ways makes data tied together avoid inconsistencies
+ 
+ -> other option is to embed -> better for performance
+ 
+ Students : teachers
+ 
+ Student will have teachers references 
+ teachers will have students references
+embedding will cause too many modifications
+
+Multikeys indexes
+- Linking and embeding works well in mongodb because of multikey indexes
+
+Students - {_id : , name: "" , teachers : [1, 7, 10, 23]}
+teachers - {_id : 10, name : "tony starck" 
+
+how to create multikey index 
+db.students.ensureIndex({'teachers' : 1})
+db.students.find({'teachers':{$all:[0,1]}})
+db.students.find({'teachers':{$all:[0,1]}}).explain() -> tells us what it did -> execution plan
+
+Benefits of embeding 
+1. improve read performance 
+2. one round trip to db
+
+Trees
+Respresenting trees
+Home : outdoor: winter: snow
+multiple parents 
+list all the ancestors of the current node : data : category - {_id:, name:, ancestors: [3, 7, 5, 8, 9] }
+ 
+When to denormalize :
+we normalize data to avoid data inconsistency with duplicate data 
+
+1:1 relation embed -> no duplicates
+1:many relation  embed -> from many to one 
+many : many -> link through arrays of object Ids 
+
+what is and ODM?
+object data mapper  -> morphia -> something like Java jpa
+
+Field mappings, indexes and constraints in morphia
+
+@Entity , @Indexes, @Id, @property, @Reference(lazy = true), 
+
+CRUD opertions in Morphia
+
+Week 4 - Performace
+1. index
+2. distribute the load across mulitple servers - sharding
+
+Pluggable storage engines
+- sotrage engine is a interface b/w persistence storage called disk and mongo server 
+- uses memory to optimize performance -> memory management
+- you can use more than one as they are pluggable
+- MMAP  - default if u dont specify
+- Wired tigerd
+- storage engine doesn't effect the communication between different mongodb servers in a cluster
+   - doesn't effect the api that db presents to the programmer
+
+
+
+- drivers talk to servers and servers talk to engine
+
+Storage engine : MMAP v1
+1. collection level concurrency or mappings 
+2. multiple reader single writer locking
+3. In place updates -> power of 2 sizes - 3-4, 7-8, 19-32
+- OS makes decision of what stays in virtual memory and what stays on disk
+
+Storage engine : Wired tiger
+- not default in 3.0
+1. document level concurrency
+2. compression of documents and indexes
+- decides which blocks to store in memory and which on disk -> memory management is done by wiredtiger
+3. no inplave updates -> mark no longer used, and write somewhere else -> storage is recycled -> no locks and is faster
+
+how to start mongod with wiredtiger
+killall mongod
+mkdir WT
+mongod -dbpath WT -storageEngine wiredTiger
+db.foo.stats()
+
+Indexes
+ 
+ - binary search 
+ He mentions that indexes in mongodb are in btrees. This is true for MMAP (and therefore for MongoDB prior to 3.0), but it does depend on your storage engine. For example, when you are using WiredTiger, as of MongoDB 3.0, indexes are implemented in b+trees. Again, you can find details in Wikipedia (links provided here for your convenience).
+ 
+ Creating indexes
+ 
+ db.students.explain().find({student_id:5})
+ db.students.createIndex({student_id:1}); -> 23 secs - takes a while 
+ db.students.explain(true).find({student_id:5})
+ compund index - db.students.createIndex({student_id:1, class_id: -1}); -> -1 -> descending
+ 
+ Discovering (and deleting) Indexes
+ db.students.getIndexes();
+ _id -> default on all indexes and can't be deleted
+ db.students.dropIndex({student_id:1});
+
+Multikey Indexes 
+- indexes on arrays 
+{name:Andrew tags:['photography', 'hiking', 'golf'], color:'red', location: ['NY', 'CA']}
+index on tags: photo, hikin, golf
+index on tags, color : photo:red, hikin:red, golf:red
+compound indexes can't both me arrays -> eg: tags, location
+each row one of them should not be a array, can be an array in different document
+
+Dot Notation and multikey
+db.students.createIndex({'scores.score' : 1});
+db.students.explain().find({'scores' : {$elemMatch : {type : 'exam', score : {'$gt' : 99.8}}});
+
+Index creation option, unique
+db.students.createIndex({thing:1}, {unique:true}); -> key cannot have duplicates
+index on _id is always unique
+
+Index creation : sparse
+{a:1, b:2, c:5} - unique indexes on 1 & b are possible
+{a:10, b:5, c:10}
+{a:13, b:17}
+{a:7, b:23}
+sparse option -> dont include documents that doesn't have the key.. index will contain only first 2 rows
+db.createIndex({cell:1}, {unique:true, sparse:true});
+-> cant be used for sorting 
+
+Index creation 
+foreground - default, relatively fast, blocks all writers and readers in the db
+background - relatively slow, doesn't blocks all writers and readers in the db, 
+db.students.createIndex({'scores.score' : 1}, {background : 1}); -- run in background
+
+Beginning in MongoDB 2.6, creating an index in the background on the primary will cause the indexes to be created in the background on secondaries, as well. The secondaries will begin index creation when the primary completes building its index.
+
+Using explain 
+- db.foo.explain().find() -> can run update, help, modify, -> everything other than insert
+- explain how query executes, does everything other than pulling data to UI
+var exp = db.example.explain()
+exp.help()
+exp.find({a:17, b:55}).sort({b:-1}) - good to read it inwards to outwards :P
+
+- u can also call explain on a cursor
+var cursor = db.example.find({a:99});
+cursor.explain();
+cursor.next();
+
+Explain : Modes
+* querryplanner -> use of indexes
+* execution stats -> use of indexes + results count
+var exp = db.example.explain("executionStats");
+exp.find({a:17, b:55}).sort({b:-1})
+- explains use of indexes, number of docs returned, execution time, total keys examined, total keys returned
+* all plans execution 
+var exp = db.example.explain("allPlansExecution");
+- does query optimizer job
+- displays different possibilities of using indexes ans displays the index used
+- includes above 2 options
+
+good practice -> every query shud hit an index
+bad practice -> no index should never be unused
+
+Covered queries
+- query can be completely covered by the indexes, no need to look into db
+- totalkeysexamined : 100, totalDocsExamined : 0
+-> project a subset of whats in the index  
+-> will use only one index at a time
+
+Choosing the index:
+
+query-> query plan for different indexes, index is chosen based on results, threshold etc and cached for future use
+
+We no longer evict plans from the cache after a threshold number of writes. Instead, we evict when the "works" of the first portion of the query exceed the number of "works" used to decide on the winning plan by a factor of 10x.
+
+How large is your index? 
+-> we have to fit working set into memory
+-> we have to fit indexes into memory
+db.students.stats() -> totalIndexSize : .. -> shud fit into memory
+db.students.totalIndexSize()
+wiredtiger compression -> works on indexes , prefix compression-> comes at the cost of CPU performance
+
+Index Cardinality:
+* Regular - 1:1
+* Sparse - <= number of documents
+* Multikey - >= documents as it individual elements of array
+- when docs are moved every index needs to be updated
+
+Geospatial indexes:
+2D -> find documents based on location
+x, y coordinates 
+- should have a field in document that specifies coordinates
+db.createIndex({'location': 2D});
+find({location: {$near: [x,y]}}).limit(20)
+- gives results in increasing distance
+
+Geospatial spherical:
+points on globe is represented by latitude, longitude -> distance from equator
+2d sphere
+mongodb takes longitude, latitude
+GeoJson -> Mongodb supports points and polygons
+db.createIndex({'location': '2dsphere'});
+
+Text indexes:
+Andrew says that when you search on strings with a standard index, the entire string must match. This isn't entirely true; a regex search will search the index (rather than the full collection), and if you anchor it on the left by beginning with ^, you can often do better still. 
+
+db.sentences.createIndex({'words' : 'text'});
+db.sentences.find({$text: {$search:'dog'}}) -> case doesn't matter, '.' doesn't matter, searches all words
+$textscore sort -> diplays list containing all words first
+
+https://docs.mongodb.com/manual/reference/operator/query/regex/#index-use
+
+Efficiency of index use:
+- selectivity - minimize number os records scanned
+- other ops - how are sorts handled
+
+- make mongodb use the index u want using -> hint
+
+db.students.find({student_id:{$gt:500000}, class_id:54}).sort({student_id:1}).hint({class_id:1}).explain("executionstats")
+
+while creating index, put equality queries first, than the range queries
+
+At about 3:13, Shannon mentions that MongoDB can walk the index backward in order to sort on the final_grade field. While true given that we are sorting on only this field, if we want to sort on multiple fields, the direction of each field on which we want to sort in a query must be the same as the direction of each field specified in the index. So if we want to sort using something like db.collection.find( { a: 75 } ).sort( { a: 1, b: -1 } ), we must specify the index using the same directions, e.g., db.collection.createIndex( { a: 1, b: -1 } ).
+
+- think about how to sort in the database than doing it in memory -> can be done by adding multiindex, with sort field being second param and range being last
+
+Logging and profiling:
+text log -> logs above 100 ms by default
+
+Profiler:
+system.profile 
+3 levels -> 0 - off, 1 - log slow queries, 2 - log all queries(debug)
+mongod -dbpath /usr/local/var/mongodb --profile 1 --slow 2
+db.system.profile.find().pretty()
+
+db.getProfilingLevel()
+db.getProfilingStatus()
+db.setProfilingStatus(1,4)
+db.setProfilingStatus(0) -> set it off
+
+db.system.profile.find({millis:{$gt:1}}).sort({ts:1}).pretty()
+https://docs.mongodb.com/manual/reference/database-profiler/
+
+
+Some of this material was recorded with an older version of the database. However, the logfile format has not changed significantly so you should be able to get the gist.
+
+Mongotop:
+Review - indexes are critical to performance, explain command, hint, profiling
+
+- high level view of where mongo is spending time
+
+mongotop 3 -> run every 3 secs
+
+Mongostat:
+- performance tuning command 
+- sample db on 1 sec intervals and gives stat on inserts, queries, updates, deletes
+
+mongostat --port 27018
+
+Sharding Overview:
+- spliting up large collection across multiple servers
+- mongos - router
+application talks to-> mongos -> mongod  ( residing on different servers)
+
+shard key -> student_id -> may be compound key 
+- insert should include shard key 
+- update, remove, find -> doesn't give shard key -> then req must be broadcasted to all dbs from mongos router -> give shard key to improve performance
+
+ 
